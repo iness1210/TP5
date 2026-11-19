@@ -474,34 +474,28 @@ class _PageWidgetState extends State<PageWidget> with WidgetsBindingObserver {
     );
   }
 
-  Widget _cartesEtat() => LayoutBuilder(
-    builder: (context, constraints) {
-      final capteur = _carteEtat(
-        icone: _alerte ? Icons.shield_outlined : Icons.shield_rounded,
-        titre: 'Capteur',
-        valeur: _alerte ? 'À surveiller' : 'Dans le seuil',
-        couleur: _alerte ? _rougeAlerte : _vert,
-        onTap: () => setState(() => _onglet = 2),
-      );
-      final widget = _carteEtat(
-        icone: Icons.widgets_rounded,
-        titre: 'Widget Android',
-        valeur: '$_nbWidgets actif${_nbWidgets == 1 ? '' : 's'}',
-        couleur: _bleu,
-        onTap: () => setState(() => _onglet = 2),
-      );
-
-      if (constraints.maxWidth < 350) {
-        return Column(children: [capteur, const SizedBox(height: 10), widget]);
-      }
-      return Row(
-        children: [
-          Expanded(child: capteur),
-          const SizedBox(width: 12),
-          Expanded(child: widget),
-        ],
-      );
-    },
+  Widget _cartesEtat() => Row(
+    children: [
+      Expanded(
+        child: _carteEtat(
+          icone: _alerte ? Icons.shield_outlined : Icons.shield_rounded,
+          titre: 'Capteur',
+          valeur: _alerte ? 'À surveiller' : 'Dans le seuil',
+          couleur: _alerte ? _rougeAlerte : _vert,
+          onTap: () => setState(() => _onglet = 2),
+        ),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: _carteEtat(
+          icone: Icons.widgets_rounded,
+          titre: 'Widget Android',
+          valeur: '$_nbWidgets actif${_nbWidgets == 1 ? '' : 's'}',
+          couleur: _bleu,
+          onTap: () => setState(() => _onglet = 2),
+        ),
+      ),
+    ],
   );
 
   Widget _carteEtat({
