@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tp5_widget/main.dart';
 
 void main() {
-  testWidgets('La page du TP5 s\'affiche et passe en alerte', (tester) async {
+  testWidgets('La page du TP5 affiche la mesure initiale', (tester) async {
     await tester.pumpWidget(const AppTp5());
     expect(find.text('Ruche connectée'), findsOneWidget);
     expect(find.text('34.0 °C'), findsWidgets);
     expect(find.text('ALERTE'), findsNothing);
   });
 
-  testWidgets('Les quatre sections de navigation sont accessibles', (
+  testWidgets('Les trois sections de navigation sont accessibles', (
     tester,
   ) async {
     await tester.pumpWidget(const AppTp5());
@@ -19,13 +19,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Aucun historique disponible'), findsOneWidget);
 
-    await tester.tap(find.text('Statistiques'));
-    await tester.pumpAndSettle();
-    expect(find.text('Données insuffisantes'), findsOneWidget);
-
     await tester.tap(find.text('Paramètres'));
     await tester.pumpAndSettle();
+    expect(find.text('Mode sombre'), findsOneWidget);
     expect(find.byType(Slider), findsNWidgets(2));
+    await tester.tap(find.text('Mode sombre'));
+    await tester.pumpAndSettle();
+    expect(find.text('Thème sombre activé'), findsOneWidget);
     await tester.drag(find.byType(ListView), const Offset(0, -500));
     await tester.pumpAndSettle();
     expect(find.text('Envoyer au widget'), findsOneWidget);

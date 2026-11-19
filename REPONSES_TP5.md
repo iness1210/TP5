@@ -61,17 +61,17 @@ La mise à jour automatique du système a un minimum de 30 min, elle n'est pas f
 
 ## Exercice 4 – Fiche projet
 
-> Exemple rempli pour un projet « ruche connectée ». **À adapter à votre propre projet IoT.**
+> Fiche correspondant au projet de démonstration livré. Pour un vrai projet IoT, remplacez la source de mesure et les valeurs par celles de votre capteur.
 
 | Question | Réponse |
 |---|---|
-| Quelle mesure le widget affiche-t-il ? (nom, unité) | Température intérieure de la ruche, en °C (`capteurs/ruche/temperature`) |
-| Quel seuil déclenche l'alerte rouge ? | ≥ 38 °C (surchauffe du couvain), seuil réglable dans l'app et envoyé au widget |
-| Qui met à jour le widget ? | Les deux : l'app Flutter à chaque nouvelle valeur Firebase quand elle est ouverte (exercice 2), et le `WidgetWorker` toutes les ~15 min quand l'app est fermée, avec lecture REST de Firebase (exercice 3) |
-| Que doit faire un clic sur le widget ? ↻ ? | Clic : ouvre l'application sur l'écran de la ruche (historique, graphiques). ↻ : relit immédiatement la dernière valeur Firebase sans ouvrir l'app |
-| Que voit l'utilisateur si Firebase ne répond pas ? | La dernière valeur connue reste affichée avec son heure (« à HH:mm »). L'heure qui ne change plus montre que la donnée est ancienne. `lireFirebase()` renvoie `null` (timeout 5 s), donc l'état n'est pas écrasé. Le worker a une contrainte réseau et réessaiera plus tard |
+| Quelle mesure le widget affiche-t-il ? (nom, unité) | La température simulée envoyée depuis l'application, en °C. L'action ↻ et le worker utilisent la température de la batterie Android comme source de démonstration. |
+| Quel seuil déclenche l'alerte rouge ? | La valeur atteint ou dépasse le seuil réglé dans l'application (38 °C par défaut). |
+| Qui met à jour le widget ? | L'application Flutter quand on appuie sur « Envoyer au widget » ; le `WidgetWorker` relit la température de la batterie environ toutes les 15 minutes. |
+| Que doit faire un clic sur le widget ? ↻ ? | Un clic sur le widget ouvre l'application. ↻ relit la température de la batterie et actualise le widget, même si l'application est fermée. |
+| Que voit l'utilisateur si la source ne fournit pas de température ? | La dernière valeur connue et son heure restent affichées ; `SourceMesure.lireEtPublier()` n'écrase pas l'état si la température de batterie est indisponible. |
 
 ## Exercices réalisés dans le code
 
 - **Exercice 1 (widget adaptatif)** : fait dans `MesureWidget.kt`. `SizeMode.Responsive` avec trois tailles : 1 × 1 affiche la valeur seule, 4 × 1 affiche titre, valeur et seuil sur une ligne, et 2 × 2 affiche le widget complet. `minResizeWidth/Height="40dp"` est ajouté dans `mesure_widget_info.xml` pour pouvoir réduire le widget à 1 × 1.
-- **Exercices 2 et 3** : ils dépendent de votre projet Firebase (URL de la base, chemin). Il faut copier les fichiers Kotlin, le XML et le `<receiver>` dans votre projet, appeler `CanalWidget.mettreAJour` dans le `onValue.listen`, et remplacer `temperatureBatterie` par `lireFirebase()` (avec la permission INTERNET et la contrainte réseau).
+- **Exercices 2 et 3 (Firebase)** : non intégrés dans ce projet de démonstration, car aucune base Firebase ni URL de projet n'est fournie. Pour les réaliser sur votre projet IoT, appelez `CanalWidget.mettreAJour` dans le `onValue.listen`, puis remplacez `temperatureBatterie` par `lireFirebase()` dans la source utilisée par le bouton ↻ et le worker (avec la permission INTERNET et la contrainte réseau).
